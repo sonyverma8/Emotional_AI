@@ -16,4 +16,4 @@ seaborn
 tqdm
 requests
 uvicorn
-
+gunicorn
