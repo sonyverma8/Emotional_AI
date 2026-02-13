@@ -1,1 +1,1 @@
-gunicorn app:app --timeout 120
+web: uvicorn app:app
