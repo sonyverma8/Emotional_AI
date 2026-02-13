@@ -15,5 +15,5 @@ seaborn
 # Utilities
 tqdm
 requests
-uvicorn
 gunicorn
+
