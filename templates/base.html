@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EmotionAI - Advanced Emotion Detection{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="uil uil-brain"></i>
+                <span>EmotionAI</span>
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+                        <i class="uil uil-estate"></i> Home
+                    </a>
+                    <a href="/analyze" class="{% if request.path == '/analyze' %}active{% endif %}">
+                        <i class="uil uil-analysis"></i> Analyzer
+                    </a>
+                    <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">
+                        <i class="uil uil-dashboard"></i> Dashboard
+                    </a>
+                    <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">
+                        <i class="uil uil-info-circle"></i> About
+                    </a>
+                    <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">
+                        <i class="uil uil-envelope"></i> Contact
+                    </a>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                        <i class="uil uil-moon"></i>
+                    </button>
+                    {% if not request.path.startswith('/analyze') %}
+                    <a href="/analyze" class="btn btn-primary btn-small">
+                        <i class="uil uil-rocket"></i> Get Started
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="uil uil-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="uil uil-brain"></i>
+                    <span>EmotionAI</span>
+                </div>
+                <p>Advanced emotion detection powered by deep learning and AI. Analyzing sentiments with high accuracy.
+                </p>
+                <div class="social-links">
+                    <a href="https://github.com/sonyverma8" target="_blank" title="GitHub"><i
+                            class="uil uil-github"></i></a>
+                    <a href="https://www.linkedin.com/in/sony-verma-9510b4273/" target="_blank" title="LinkedIn"><i
+                            class="uil uil-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/analyze">Analyzer</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 EmotionAI. All rights reserved. | Designed by Sony Verma</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

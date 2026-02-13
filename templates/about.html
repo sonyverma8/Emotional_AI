@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - EmotionAI{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="text-center" style="max-width: 800px; margin: 0 auto 4rem;">
+            <h1 class="text-huge">About <span class="text-gradient">EmotionAI</span></h1>
+            <p class="text-secondary text-lg">Pioneering the future of sentiment analysis through advanced deep
+                learning.</p>
+        </div>
+
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem;">
+            <div>
+                <h2 style="margin-bottom: 1.5rem;">Our Mission</h2>
+                <p class="text-secondary" style="margin-bottom: 1.5rem;">
+                    EmotionAI is a cutting-edge emotion detection platform powered by advanced deep learning algorithms.
+                    Our mission is to bridge the gap between human emotion and artificial intelligence, enabling
+                    machines to understand and respond to human sentiment with remarkable accuracy.
+                </p>
+                <p class="text-secondary">
+                    Built with TensorFlow and trained on extensive datasets, our system recognizes six fundamental
+                    emotions: joy, sadness, anger, fear, love, and surprise. We provide developers, researchers, and
+                    businesses with the tools to analyze text at scale.
+                </p>
+            </div>
+            <div class="card" style="padding: 0; overflow: hidden; border: none; box-shadow: var(--shadow-lg);">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80"
+                    alt="Data Analytics" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </div>
+
+        <h2 class="text-center" style="margin-bottom: 3rem;">Our Technology</h2>
+        <div class="features-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-brain"></i>
+                </div>
+                <h3>Neural Networks</h3>
+                <p class="text-secondary">Utilizing LSTM and Transformer architectures for context-aware emotion
+                    recognition.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-database"></i>
+                </div>
+                <h3>Big Data</h3>
+                <p class="text-secondary">Trained on over 10 million labeled text samples from diverse sources.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-lock"></i>
+                </div>
+                <h3>Privacy First</h3>
+                <p class="text-secondary">We prioritize data privacy and do not store analyzed text data permanently.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="background: var(--surface-hover);">
+    <div class="container text-center">
+        <h2 style="margin-bottom: 3rem;">Meet the Team</h2>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div class="card">
+                <div style="width: 100px; height: 100px; margin: 0 auto 1.5rem; border-radius: 50%; overflow: hidden;">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80"
+                        alt="Team Member">
+                </div>
+                <h3>Alex Chen</h3>
+                <p class="text-secondary text-sm">Lead AI Researcher</p>
+            </div>
+
+            <div class="card">
+                <div style="width: 100px; height: 100px; margin: 0 auto 1.5rem; border-radius: 50%; overflow: hidden;">
+                    <img src="https://avatars.githubusercontent.com/u/12345678?v=4"
+                        onerror="this.src='https://ui-avatars.com/api/?name=Sony+Verma&background=random'"
+                        alt="Sony Verma">
+                </div>
+                <h3>Sony Verma</h3>
+                <p class="text-secondary text-sm">Frontend Architect</p>
+                <div class="flex" style="justify-content: center; gap: 0.5rem; margin-top: 1rem;">
+                    <a href="https://github.com/sonyverma8" target="_blank" style="color: var(--text-secondary);"><i
+                            class="uil uil-github"></i></a>
+                    <a href="https://www.linkedin.com/in/sony-verma-9510b4273/" target="_blank"
+                        style="color: var(--text-secondary);"><i class="uil uil-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="width: 100px; height: 100px; margin: 0 auto 1.5rem; border-radius: 50%; overflow: hidden;">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80"
+                        alt="Team Member">
+                </div>
+                <h3>Michael Ross</h3>
+                <p class="text-secondary text-sm">Data Scientist</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

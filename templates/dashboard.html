@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EmotionAI{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="dashboard-stats-data" type="application/json">
+    {{ stats|tojson|safe if stats else '{}' }}
+</script>
+<script>
+    // Pass Flask data to JavaScript
+    try {
+        const statsData = document.getElementById('dashboard-stats-data').textContent;
+        window.dashboardStats = JSON.parse(statsData);
+    } catch (e) {
+        console.error('Error parsing dashboard stats:', e);
+        window.dashboardStats = {};
+    }
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h1 class="text-huge" style="margin-bottom: 0.5rem;">Analytics Dashboard</h1>
+                <p class="text-secondary">Real-time overview of emotion detection performance.</p>
+            </div>
+            <div class="flex" style="gap: 1rem; align-items: center;">
+                <span class="text-sm font-medium"
+                    style="background: var(--surface-hover); padding: 0.5rem 1rem; border-radius: var(--radius-full);">
+                    <i class="uil uil-clock"></i> <span id="currentDateTime"></span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="card" style="padding: 1.5rem;">
+                <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <span class="text-secondary text-sm">Total Analyses</span>
+                        <h3 class="text-huge" id="totalAnalyses" style="margin: 0.5rem 0; font-size: 2rem;">{{
+                            stats.total_predictions if stats else 0 }}</h3>
+                    </div>
+                    <div class="btn-icon-only"
+                        style="background: rgba(99, 102, 241, 0.1); color: var(--primary-color);">
+                        <i class="uil uil-analysis"></i>
+                    </div>
+                </div>
+                <div class="text-sm text-success flex" style="align-items: center; gap: 0.25rem;">
+                    <i class="uil uil-arrow-growth"></i> +12% this week
+                </div>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <span class="text-secondary text-sm">Avg. Confidence</span>
+                        <h3 class="text-huge" id="avgConfidence" style="margin: 0.5rem 0; font-size: 2rem;">{{
+                            stats.accuracy if stats else 0 }}%</h3>
+                    </div>
+                    <div class="btn-icon-only"
+                        style="background: rgba(16, 185, 129, 0.1); color: var(--success-color);">
+                        <i class="uil uil-bullseye"></i>
+                    </div>
+                </div>
+                <div class="text-sm text-success flex" style="align-items: center; gap: 0.25rem;">
+                    <i class="uil uil-arrow-growth"></i> +2.3%
+                </div>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <span class="text-secondary text-sm">Response Time</span>
+                        <h3 class="text-huge" id="responseTime" style="margin: 0.5rem 0; font-size: 2rem;">124ms</h3>
+                    </div>
+                    <div class="btn-icon-only"
+                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning-color);">
+                        <i class="uil uil-stopwatch"></i>
+                    </div>
+                </div>
+                <div class="text-sm text-success flex" style="align-items: center; gap: 0.25rem;">
+                    <i class="uil uil-arrow-down"></i> -8ms (Improved)
+                </div>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="flex" style="justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <span class="text-secondary text-sm">Most Common</span>
+                        <h3 class="text-huge" id="modelAccuracy"
+                            style="margin: 0.5rem 0; font-size: 2rem; text-transform: capitalize;">{{
+                            stats.most_common_emotion if stats else 'N/A' }}</h3>
+                    </div>
+                    <div class="btn-icon-only"
+                        style="background: rgba(236, 72, 153, 0.1); color: var(--secondary-color);">
+                        <i class="uil uil-brain"></i>
+                    </div>
+                </div>
+                <div class="text-sm text-success flex" style="align-items: center; gap: 0.25rem;">
+                    <i class="uil uil-check-circle"></i> Stable
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            <!-- Emotion Distribution -->
+            <div class="card">
+                <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3>Emotion Distribution</h3>
+                    <select id="timeRange"
+                        style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--text-light); background: var(--bg-color); color: var(--text-primary);">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                </div>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="emotionDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Trend Over Time -->
+            <div class="card">
+                <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3>Emotion Trends</h3>
+                    <div id="trendLegend"></div>
+                </div>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Analyses -->
+        <div class="card">
+            <div class="flex" style="justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3>Recent Analyses</h3>
+                <button class="btn btn-small btn-outline" onclick="refreshHistory()">
+                    <i class="uil uil-sync"></i> Refresh
+                </button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--surface-hover);">
+                            <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Text Preview</th>
+                            <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Emotion</th>
+                            <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Confidence</th>
+                            <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Time</th>
+                            <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Populated by JavaScript -->
+                        {% if stats and stats.recent_activity %}
+                        {% for activity in stats.recent_activity %}
+                        <tr style="border-bottom: 1px solid var(--glass-border); transition: var(--transition);">
+                            <td
+                                style="padding: 1rem; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Sample text preview...</td>
+                            <td style="padding: 1rem;">
+                                <span
+                                    style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); background: rgba(99, 102, 241, 0.1); color: var(--primary-color); font-weight: 500; font-size: 0.875rem;">
+                                    {{ activity.emotion|capitalize }}
+                                </span>
+                            </td>
+                            <td style="padding: 1rem;">{{ activity.confidence }}</td>
+                            <td style="padding: 1rem; color: var(--text-secondary);">{{ activity.time }}</td>
+                            <td style="padding: 1rem;">
+                                <button class="btn-icon-only text-secondary" style="width: 32px; height: 32px;">
+                                    <i class="uil uil-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-secondary);">No
+                                recent activity found</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

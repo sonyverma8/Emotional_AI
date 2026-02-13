@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Analyzer - EmotionAI{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/analyzer.js') }}"></script>
+<script id="emotion-data" type="application/json">
+    {% if emotion and emotions %}
+    {{ emotions | tojson | safe }}
+    {% else %}
+    null
+    {% endif %}
+</script>
+
+<script>
+    // Emotion colors for chart
+    const emotionColors = {
+        'joy': '#FFD700',
+        'sadness': '#4169E1',
+        'anger': '#DC143C',
+        'fear': '#800080',
+        'love': '#FF69B4',
+        'surprise': '#FFA500'
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize chart if data exists
+        const emotionDataElement = document.getElementById('emotion-data');
+        if (emotionDataElement) {
+            try {
+                const emotionsData = JSON.parse(emotionDataElement.textContent);
+
+                if (emotionsData) {
+                    const ctx = document.getElementById('emotionChart').getContext('2d');
+
+                    // Process data client-side
+                    const labels = Object.keys(emotionsData).map(e => e.charAt(0).toUpperCase() + e.slice(1));
+                    const data = Object.values(emotionsData).map(p => (p * 100).toFixed(2));
+                    const colors = Object.keys(emotionsData).map(e => emotionColors[e.toLowerCase()] || '#808080');
+
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: colors,
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return context.label + ': ' + context.raw + '%';
+                                        }
+                                    }
+                                }
+                            },
+                            cutout: '70%'
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Error parsing emotion data", e);
+            }
+        }
+
+        // Utility to apply dynamic colors from data attributes (fixes CSS linter errors)
+        const applyStyles = (selector, prop, attr) => {
+            document.querySelectorAll(selector).forEach(el => {
+                const val = el.getAttribute(attr);
+                if (val) el.style[prop] = val;
+            });
+        };
+
+        applyStyles('[data-color]', 'color', 'data-color');
+        applyStyles('[data-bg-color]', 'backgroundColor', 'data-bg-color');
+
+        // Handle dynamic width for progress bars
+        document.querySelectorAll('[data-width]').forEach(el => {
+            const width = el.getAttribute('data-width');
+            if (width) el.style.width = width;
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 1000px;">
+        <div class="text-center" style="margin-bottom: 3rem;">
+            <h1 class="text-huge">Emotion Analyzer</h1>
+            <p class="text-secondary">Enter your text below and let our AI detect the underlying emotions.</p>
+        </div>
+
+        <div class="grid" style="gap: 3rem;">
+            <!-- Input Section -->
+            <div class="card">
+                <div class="flex" style="align-items: center; margin-bottom: 1.5rem; gap: 1rem;">
+                    <div class="btn-icon-only" style="background: var(--surface-hover); color: var(--primary-color);">
+                        <i class="uil uil-edit"></i>
+                    </div>
+                    <h2>Input Text</h2>
+                </div>
+
+                <form id="analyzeForm" method="POST">
+                    <div style="margin-bottom: 1.5rem;">
+                        <textarea id="textInput" name="text"
+                            style="width: 100%; min-height: 200px; padding: 1.5rem; border: 2px solid var(--glass-border); border-radius: var(--radius-md); background: var(--bg-color); color: var(--text-primary); font-family: inherit; font-size: 1rem; resize: vertical; transition: var(--transition);"
+                            placeholder="Type or paste your text here...&#10;&#10;Example: I'm so excited about my new job!">{{ text if text else '' }}</textarea>
+                        <div class="flex"
+                            style="justify-content: flex-end; margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-light);">
+                            <span><span id="charCount">0</span> characters</span>
+                            <span style="margin: 0 0.5rem;">·</span>
+                            <span><span id="wordCount">0</span> words</span>
+                        </div>
+                    </div>
+
+                    <div class="flex" style="flex-wrap: wrap;">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="uil uil-processor"></i> Analyze Emotion
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn">
+                            <i class="uil uil-trash-alt"></i> Clear
+                        </button>
+                        <button type="button" class="btn btn-outline" id="sampleBtn">
+                            <i class="uil uil-flask"></i> Try Sample
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            {% if emotion or error %}
+            <div class="card animate-fade-in" id="resultsCard">
+                <div class="flex" style="align-items: center; margin-bottom: 1.5rem; gap: 1rem;">
+                    <div class="btn-icon-only" style="background: var(--surface-hover); color: var(--primary-color);">
+                        <i class="uil uil-chart-pie"></i>
+                    </div>
+                    <h2>Analysis Results</h2>
+                </div>
+
+                {% if emotion %}
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <!-- Primary Emotion -->
+                    <div
+                        style="background: var(--surface-hover); padding: 2rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <div
+                            style="width: 120px; height: 120px; margin-bottom: 1.5rem; border-radius: 50%; border: 4px solid white; box-shadow: var(--shadow-md); overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--surface-color);">
+                            {% set icon_map = {
+                            'joy': 'uil-smile',
+                            'sadness': 'uil-tear',
+                            'anger': 'uil-angry',
+                            'fear': 'uil-shocked',
+                            'love': 'uil-heart',
+                            'surprise': 'uil-surprise'
+                            } %}
+                            <i class="uil {{ icon_map.get(emotion.lower(), 'uil-meh') }}" style="font-size: 4rem;"
+                                data-color="{{ get_color(emotion) }}"></i>
+                        </div>
+
+                        <span class="text-secondary text-sm"
+                            style="text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Detected
+                            Emotion</span>
+                        <h3 class="text-huge" style="margin-bottom: 1rem;" data-color="{{ get_color(emotion) }}">{{
+                            emotion|capitalize }}</h3>
+
+                        <div
+                            style="background: var(--surface-color); padding: 0.5rem 1rem; border-radius: var(--radius-full); font-weight: 600; font-size: 0.875rem; box-shadow: var(--shadow-sm);">
+                            Confidence: {{ confidence }}
+                        </div>
+                    </div>
+
+                    <!-- Emotion Distribution -->
+                    <div>
+                        <h4 style="margin-bottom: 1.5rem;">Emotion Distribution</h4>
+                        <div style="height: 200px; margin-bottom: 2rem;">
+                            <canvas id="emotionChart"></canvas>
+                        </div>
+
+                        <div class="grid" style="gap: 1rem;">
+                            {% for emotion_name, prob in emotions.items() %}
+                            <div class="flex" style="align-items: center; justify-content: space-between;">
+                                <div class="flex" style="align-items: center; gap: 0.75rem;">
+                                    <span style="width: 12px; height: 12px; border-radius: 50%;"
+                                        data-bg-color="{{ get_color(emotion_name) }}"></span>
+                                    <span style="font-weight: 500;">{{ emotion_name|capitalize }}</span>
+                                </div>
+                                <div class="flex"
+                                    style="align-items: center; gap: 1rem; flex: 1; justify-content: flex-end;">
+                                    <div
+                                        style="flex: 1; max-width: 100px; height: 8px; background: var(--surface-hover); border-radius: 4px; overflow: hidden;">
+                                        <div style="height: 100%; border-radius: 4px;" data-width="{{ prob*100 }}%"
+                                            data-bg-color="{{ get_color(emotion_name) }}">
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-medium" style="min-width: 40px; text-align: right;">{{
+                                        "%.1f"|format(prob*100) }}%</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Summary -->
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);">
+                    <h4 style="margin-bottom: 1rem;">Analyzed Text</h4>
+                    <p
+                        style="background: var(--bg-color); padding: 1.5rem; border-radius: var(--radius-md); font-style: italic; color: var(--text-secondary); border-left: 4px solid var(--primary-color);">
+                        "{{ text }}"
+                    </p>
+                </div>
+
+                {% elif error %}
+                <div
+                    style="background: #fef2f2; color: #991b1b; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid #fecaca; display: flex; gap: 1rem; align-items: start;">
+                    <i class="uil uil-exclamation-triangle" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <h4 style="color: #991b1b; margin-bottom: 0.5rem;">Analysis Failed</h4>
+                        <p>{{ error }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

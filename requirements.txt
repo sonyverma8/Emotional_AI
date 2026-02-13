@@ -1,0 +1,18 @@
+# Core Framework
+tensorflow
+keras
+# Data Processing
+pandas
+numpy
+scikit-learn
+# Web Framework
+Flask
+# Serialization
+joblib
+# Visualization (optional, for plotting training history)
+matplotlib
+seaborn
+# Utilities
+tqdm
+requests
+uvicorn

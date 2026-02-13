@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - EmotionAI{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 4rem;">
+            <h1 class="text-huge">Get in <span class="text-gradient">Touch</span></h1>
+            <p class="text-secondary text-lg">We'd love to hear from you. Send us a message and we'll respond as soon as
+                possible.</p>
+        </div>
+
+        <div class="flex"
+            style="flex-wrap: wrap; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: flex-start;">
+            <!-- Contact Info -->
+            <div class="flex" style="flex-direction: column; gap: 2rem; flex: 1; min-width: 280px;">
+                <div class="card">
+                    <div class="flex" style="align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="btn-icon-only"
+                            style="background: rgba(99, 102, 241, 0.1); color: var(--primary-color);">
+                            <i class="uil uil-envelope"></i>
+                        </div>
+                        <h3 style="margin: 0;">Email</h3>
+                    </div>
+                    <p class="text-secondary">support@emotionai.com</p>
+                    <p class="text-secondary">sales@emotionai.com</p>
+                </div>
+
+                <div class="card">
+                    <div class="flex" style="align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="btn-icon-only"
+                            style="background: rgba(236, 72, 153, 0.1); color: var(--secondary-color);">
+                            <i class="uil uil-location-point"></i>
+                        </div>
+                        <h3 style="margin: 0;">Location</h3>
+                    </div>
+                    <p class="text-secondary">456 Tech Park, Sector 62</p>
+                    <p class="text-secondary">Noida, Uttar Pradesh, India</p>
+                </div>
+
+                <div class="card">
+                    <div class="flex" style="align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="btn-icon-only"
+                            style="background: rgba(16, 185, 129, 0.1); color: var(--success-color);">
+                            <i class="uil uil-share-alt"></i>
+                        </div>
+                        <h3 style="margin: 0;">Social</h3>
+                    </div>
+                    <div class="flex" style="gap: 1rem;">
+                        <a href="https://www.linkedin.com/in/sony-verma-9510b4273/" target="_blank"
+                            class="btn-icon-only"
+                            style="background: var(--surface-hover); color: var(--text-secondary);">
+                            <i class="uil uil-linkedin"></i>
+                        </a>
+                        <a href="https://github.com/sonyverma8" target="_blank" class="btn-icon-only"
+                            style="background: var(--surface-hover); color: var(--text-secondary);">
+                            <i class="uil uil-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="card">
+                <form id="contactForm">
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label class="text-sm font-medium"
+                                style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">First
+                                Name</label>
+                            <input type="text" placeholder="John"
+                                style="width: 100%; padding: 0.75rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: var(--bg-color); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium"
+                                style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Last
+                                Name</label>
+                            <input type="text" placeholder="Doe"
+                                style="width: 100%; padding: 0.75rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: var(--bg-color); color: var(--text-primary);">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="text-sm font-medium"
+                            style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Email
+                            Address</label>
+                        <input type="email" placeholder="john@example.com"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: var(--bg-color); color: var(--text-primary);">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label class="text-sm font-medium"
+                            style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Subject</label>
+                        <select
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: var(--bg-color); color: var(--text-primary);">
+                            <option>General Inquiry</option>
+                            <option>API Support</option>
+                            <option>Sales Question</option>
+                            <option>Feedback</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <label class="text-sm font-medium"
+                            style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Message</label>
+                        <textarea rows="5" placeholder="How can we help you?"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: var(--bg-color); color: var(--text-primary); resize: vertical;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
+                        <i class="uil uil-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

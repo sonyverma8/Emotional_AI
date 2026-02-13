@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}EmotionAI - Understand Emotions Through AI{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content animate-fade-in">
+        <h1 class="text-huge">Understand Emotions <br>Through <span class="text-gradient">AI</span></h1>
+        <p class="hero-subtitle">Advanced deep learning model that detects emotions from text with high accuracy. Unlock
+            insights from human sentiment.</p>
+
+        <div class="flex" style="justify-content: center; margin-bottom: 3rem;">
+            <a href="/analyze" class="btn btn-primary btn-large">
+                <i class="uil uil-rocket"></i> Try It Now
+            </a>
+            <a href="#features" class="btn btn-secondary btn-large">
+                <i class="uil uil-info-circle"></i> Learn More
+            </a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Emotions</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">85%+</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">Real-time</span>
+                <span class="stat-label">Analysis</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 4rem;">
+            <h2 class="text-huge">Why Choose <span class="text-gradient">EmotionAI</span>?</h2>
+            <p class="text-secondary">Powerful features built for developers and researchers</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-brain"></i>
+                </div>
+                <h3>Deep Learning</h3>
+                <p class="text-secondary">Powered by TensorFlow with advanced neural networks for accurate multi-class
+                    emotion detection.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-bolt"></i>
+                </div>
+                <h3>Real-time Analysis</h3>
+                <p class="text-secondary">Get instant predictions with confidence scores in milliseconds. optimized for
+                    performance.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-globe"></i>
+                </div>
+                <h3>Multi-language</h3>
+                <p class="text-secondary">Support for multiple language patterns with robust text preprocessing and
+                    tokenization.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="uil uil-chart-pie"></i>
+                </div>
+                <h3>Detailed Analytics</h3>
+                <p class="text-secondary">Comprehensive visualization of emotion distribution and confidence metrics.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section" style="background: var(--surface-hover);">
+    <div class="container text-center">
+        <h2 class="text-huge">Ready to Get Started?</h2>
+        <p class="hero-subtitle">Integrate advanced emotion detection into your applications today.</p>
+        <a href="/analyze" class="btn btn-primary btn-large">
+            <i class="uil uil-play"></i> Start Analyzing
+        </a>
+    </div>
+</section>
+{% endblock %}
